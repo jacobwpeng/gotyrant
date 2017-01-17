@@ -14,6 +14,12 @@ type Error struct {
 }
 
 func (e Error) Error() string {
+	switch e.Code {
+	case CodeNotExist:
+		return "Record not exist"
+	case CodeExist:
+		return "Record exist"
+	}
 	return fmt.Sprintf("Server error code %d", e.Code)
 }
 
