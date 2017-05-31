@@ -60,7 +60,7 @@ func (client *Client) Close() {
 	}
 }
 
-func (client *Client) Put(key []byte, value []byte) error {
+func (client *Client) Put(key, value []byte) error {
 	var req Request
 	req.SetMagic(MagicPut)
 	req.AddUInt32(uint32(len(key)))
@@ -75,7 +75,11 @@ func (client *Client) Put(key []byte, value []byte) error {
 	return readCodeAsError(client.conn, CodeMisc)
 }
 
-func (client *Client) PutNR(key []byte, value []byte) error {
+func (client *Client) PutString(key, value string) error {
+	return client.Put([]byte(key), []byte(value))
+}
+
+func (client *Client) PutNR(key, value []byte) error {
 	var req Request
 	req.SetMagic(MagicPutNR)
 	req.AddUInt32(uint32(len(key)))
@@ -85,7 +89,7 @@ func (client *Client) PutNR(key []byte, value []byte) error {
 	return client.SendRequest(&req)
 }
 
-func (client *Client) PutKeep(key []byte, value []byte) error {
+func (client *Client) PutKeep(key, value []byte) error {
 	var req Request
 	req.SetMagic(MagicPutKeep)
 	req.AddUInt32(uint32(len(key)))
